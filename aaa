@@ -1,0 +1,50 @@
+drivers = [item for item in pyodbc.drivers()]
+driver = drivers[-1]
+
+server = 'myserver'
+database = 'mydb'
+uid = 'myuser'
+pwd = 'mypass'
+con_string = f'DRIVER={driver};SERVER={server};DATABASE={database};UID={uid};PWD={pwd}'
+print(con_string)
+cnxn = pyodbc.connect(con_string)
+...
+
+
+# FROM python:3.6
+# Install system dependencies
+# RUN apt-get update && apt-get install -y unixodbc-dev gcc
+
+# RUN mkdir /app
+# WORKDIR /app
+
+# Copy the requirements file and install dependencies
+# COPY requirements.txt .
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+# COPY app.py /app
+
+# EXPOSE 8080
+
+# CMD ["python", "app.py"]
+
+
+
+# Use an official Python runtime as the base image
+FROM python:3.9-alpine
+# Set the working directory in the container
+WORKDIR /app
+# Copy the application code to the container
+COPY . .
+# Install required packages
+RUN pip install cython && \
+    apk update && apk add libgssapi_krb5 libkrb5 && \
+    apk add libgssapi_krb5 libkrb5 libssl1.1 libcrypto1.1 && \
+    apk add g++ gcc gfortran unixodbc-dev  && \
+    apk add freetds-dev && \
+    pip install pymssql && \
+    pip install --no-cache-dir uwsgi pyodbc Flask
+# Specify the command to run when the container starts
+CMD ["uwsgi", "--http", ":8080", "--wsgi-file", "app.py", "--callable", "app", "--processes", "4", "--threads", "2"]
+

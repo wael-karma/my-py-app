@@ -1,0 +1,65 @@
+Create and run a new flask app
+
+mkdir new_project
+cd  new_project
+python3 -m venv venv && source venv/bin/activate
+pip install Flask
+export FLASK_APP=app.py
+flask run
+
+
+
+export FLASK_DEBUG=1 ==> each change made in code will be synchronized and seen directly into website
+
+
+
+this command adds all the requirements of the app automatically in the requirements file
+pip freeze > requirements.txt
+
+Build docker image
+docker build -t my-app .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
